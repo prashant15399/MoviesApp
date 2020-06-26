@@ -8,12 +8,32 @@
 
 import UIKit
 
-class CompanyDetailViewController: UIViewController {
-
+class MovieDetailViewController: UIViewController {
+    
+    //MARK:Properties
+    @IBOutlet weak var poster: UIImageView!
+    @IBOutlet weak var movieTitle: UILabel!
+    @IBOutlet weak var releaseDate: UILabel!
+    @IBOutlet weak var originalLanguage: UILabel!
+    @IBOutlet weak var rating: UILabel!
+    @IBOutlet weak var totalVote: UILabel!
+    var movieService = MovieService()
+    var movieDetails = [Movie]()
+    var collectionViewControlller = CollectionViewController()
+    var moviePoster: [NSData]?
+    var movieIndex:Int?
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //collectionViewControlller.delegate = self
+       
+        //movieDetails = movieService.movieDetail()
+         //movieService.delegate = self
+        
 
-        // Do any additional setup after loading the view.
+       
     }
     
 
@@ -27,4 +47,32 @@ class CompanyDetailViewController: UIViewController {
     }
     */
 
+}
+
+extension MovieDetailViewController: CollectionViewControllerDelegate,MovieServiceDelegate{
+    func ismoviePosterDownloaded(moviePoster: [NSData]) {
+        
+    }
+    
+    func ismovieDetailAvailable(movieDetail: [Movie]) {
+        movieDetails = movieDetail
+        
+        self.viewDidLoad()
+    }
+    
+    func cellInformation(indexPath: Int, moviePoster: [NSData]) {
+        self.movieIndex = indexPath
+        self.moviePoster = moviePoster
+        poster.image = UIImage(data: moviePoster[indexPath] as Data)
+        movieTitle.text = movieDetails[indexPath].title
+        rating.text = "\(movieDetails[indexPath].voteAverage)"
+        originalLanguage.text = "\(movieDetails[indexPath].originalLanguage) "
+        totalVote.text = "\(movieDetails[indexPath].voteCount)"
+        releaseDate.text = movieDetails[indexPath].releaseDate
+        
+        
+        
+    }
+    
+    
 }

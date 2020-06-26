@@ -9,6 +9,7 @@
 import Foundation
 protocol  MovieServiceDelegate: class {
     func ismoviePosterDownloaded(moviePoster: [NSData])
+    func ismovieDetailAvailable(movieDetail:[Movie])
 }
 
 class MovieService {
@@ -19,6 +20,7 @@ class MovieService {
     
     //MARK: Actions
      func fatchMovies(urlToExcute:URL, handler: @escaping (MoviesResponse?,Error?) -> Void){
+        
         print("fatch")
         let urlSession = URLSession.shared
         let urlRequest = URLRequest(url: urlToExcute)
@@ -96,6 +98,38 @@ class MovieService {
                  
         return self.moviePoster
          }
+    func movieDetail()-> [Movie]{
+        var movieDetails = [Movie]()
+        let url = URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=40fba98ae040578768474f01d823eb7c&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1")
+        self.fatchMovies(urlToExcute: url!){ (movieResponse,error) in
+          DispatchQueue.main.async {
+                
+            guard let movieResponse = movieResponse else{
+                        
+                        return
+            }
+            
+            guard let movies = movieResponse.results as? [Movie] else{
+                print(error)
+                
+            }
+            
+            movieDetails = movieResponse.results
+            self.delegate?.ismovieDetailAvailable(movieDetail: movieDetails)
+            
+            
+                    
+                    
+                        
+                        
+                    
+                    
+        }
+          
+        }
+        return movieDetails
+        
+   }
     
     
 }

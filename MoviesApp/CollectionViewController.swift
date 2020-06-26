@@ -7,17 +7,18 @@
 //
 
 import UIKit
-
-
+protocol CollectionViewControllerDelegate: class{
+    func cellInformation(indexPath:Int ,moviePoster:[NSData])
+}
 
 class CollectionViewController: UICollectionViewController, UITextFieldDelegate {
     
     
     //MARK: Properties
     private let reuseIdentifier = "MovieCell"
-   
     var moviePoster = [NSData]()
     var movieServices = MovieService()
+    weak var delegate: CollectionViewControllerDelegate?
 
     
     
@@ -91,9 +92,10 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         if let vc = storyboard?.instantiateViewController(identifier: "MovieDetailViewController"){
             self.navigationController?.pushViewController(vc, animated: true)
-            
+            self.delegate?.cellInformation(indexPath: indexPath.row, moviePoster: moviePoster)
             
         }
     }
@@ -132,6 +134,10 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
 }
 
 extension CollectionViewController: MovieServiceDelegate{
+    func ismovieDetailAvailable(movieDetail: [Movie]) {
+        
+    }
+    
     
     func ismoviePosterDownloaded(moviePoster:[NSData]) {
         self.collectionView!.reloadData()
