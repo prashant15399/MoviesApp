@@ -8,12 +8,25 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
 
-class CollectionViewController: UICollectionViewController {
 
+class CollectionViewController: UICollectionViewController, UITextFieldDelegate {
+    
+    
+    //MARK: Properties
+    private let reuseIdentifier = "MovieCell"
+   
+    var moviePoster = [NSData]()
+    var movieServices = MovieService()
+
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        movieServices.delegate = self
+        moviePoster = movieServices.getMoviePoster()
+        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -21,9 +34,29 @@ class CollectionViewController: UICollectionViewController {
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
-        // Do any additional setup after loading the view.
+       
+    }
+    
+    //MARK: Actions
+    
+    func updateDataOfCell(_ cell:UICollectionViewCell,_ indexPath:IndexPath ){
+        let imageView:UIImageView=UIImageView(frame: CGRect(x: 0, y: 0, width: 115, height: 160))
+        imageView.image = UIImage(data: moviePoster[indexPath.row] as Data)
+        cell.backgroundColor = .green
+        cell.contentView.addSubview(imageView)
+        
     }
 
+    @IBAction func getMovieDetail(_ sender: UITapGestureRecognizer){
+        print("addcontroller")
+        
+        
+        
+        
+    }
+    
+    
+    
     /*
     // MARK: - Navigation
 
@@ -38,21 +71,31 @@ class CollectionViewController: UICollectionViewController {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 0
+        return moviePoster.count
+        
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
+     
+        updateDataOfCell(cell,indexPath)
+        
     
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let vc = storyboard?.instantiateViewController(identifier: "MovieDetailViewController"){
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+            
+        }
     }
 
     // MARK: UICollectionViewDelegate
@@ -86,4 +129,15 @@ class CollectionViewController: UICollectionViewController {
     }
     */
 
+}
+
+extension CollectionViewController: MovieServiceDelegate{
+    
+    func ismoviePosterDownloaded(moviePoster:[NSData]) {
+        self.collectionView!.reloadData()
+        self.moviePoster = moviePoster
+        
+    }
+    
+    
 }
