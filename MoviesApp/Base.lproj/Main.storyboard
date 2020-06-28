@@ -33,9 +33,6 @@
                                         <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7an-Z3-ecu">
                                             <rect key="frame" x="0.0" y="0.0" width="115" height="160"/>
                                             <gestureRecognizers/>
-                                            <connections>
-                                                <outletCollection property="gestureRecognizers" destination="Hsa-6A-Ygr" appends="YES" id="bu3-cL-w3h"/>
-                                            </connections>
                                         </imageView>
                                     </subviews>
                                     <constraints>
@@ -45,6 +42,9 @@
                                         <constraint firstAttribute="bottom" secondItem="7an-Z3-ecu" secondAttribute="bottom" id="hcL-sx-sWB"/>
                                     </constraints>
                                 </collectionViewCellContentView>
+                                <connections>
+                                    <outlet property="poster" destination="7an-Z3-ecu" id="1Fy-UB-sx8"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -55,11 +55,6 @@
                     <navigationItem key="navigationItem" id="wBS-Ob-tSP"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xry-su-xZx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer cancelsTouchesInView="NO" id="Hsa-6A-Ygr">
-                    <connections>
-                        <action selector="getMovieDetail:" destination="enl-Jp-5m4" id="Hlm-UG-f4N"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1623" y="-20"/>
         </scene>

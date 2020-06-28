@@ -13,19 +13,22 @@ struct MoviesResponse: Codable {
 }
 // MARK: - Result
 struct Movie: Codable {
-    let popularity: Double
-    let voteCount: Int
-    let video: Bool
-    let posterPath: String
-    let id: Int
-    let adult: Bool
-    let backdropPath: String
-    let originalLanguage: OriginalLanguage
-    let originalTitle: String
-    let genreIDS: [Int]
-    let title: String
-    let voteAverage: Double
-    let overview, releaseDate: String
+    let popularity: Double?
+    let voteCount: Int?
+    let video: Bool?
+    let posterPath: String?
+    let id: Int?
+    let adult: Bool?
+    let backdropPath: String?
+    let originalLanguage: OriginalLanguage?
+    let originalTitle: String?
+    let genreIDS: [Int]?
+    let title: String?
+    let voteAverage: Double?
+    let overview, releaseDate: String?
+    var posterURL: URL {
+        return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath ?? "")")!
+    }
     enum CodingKeys: String, CodingKey {
         case popularity
         case voteCount = "vote_count"
@@ -47,4 +50,11 @@ enum OriginalLanguage: String, Codable {
     case fr = "fr"
     case ko = "ko"
     case sv = "sv"
+    case ja = "ja"
+    case hi = "hi"
+    case es = "es"
+    case pl = "pl"
+    case zh = "zh"
+    case pt = "pt"
+    case ru = "ru"
 }

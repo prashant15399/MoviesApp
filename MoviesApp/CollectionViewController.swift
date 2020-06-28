@@ -11,139 +11,195 @@ protocol CollectionViewControllerDelegate: class{
     func cellInformation(indexPath:Int ,moviePoster:[NSData])
 }
 
+
+
 class CollectionViewController: UICollectionViewController, UITextFieldDelegate {
     
+    //MARK:Properties
     
-    //MARK: Properties
-    private let reuseIdentifier = "MovieCell"
-    var moviePoster = [NSData]()
-    var movieServices = MovieService()
-    weak var delegate: CollectionViewControllerDelegate?
+    //NavigationBar Properties
+    let navTitle = UILabel()
+    let textField = UILabel()
+    let searchController = UISearchController(searchResultsController: nil)
+    var isSearchBarEmpty:Bool {
+        
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    var isSearching: Bool {
+        
+        return searchController.isActive && !isSearchBarEmpty
+    }
+    
+    var movieService: MovieService = MovieStore.shared
+    var totalResults = 0
+    var currentPage = 1
+    var isFetchInProgress = false
+    var newMovies = [Movie]()
+    var movies = [Movie]() {
+        didSet {
+            
+            if currentPage == 1{
+                print(currentPage)
+                collectionView.reloadData()
+            }else if currentPage > 1 && !isSearching{
+                print(currentPage)
+                collectionView.reloadItems(at: calculateIndexPathsToReload(from: newMovies))
+            }
+            
+            
+        }
+    }
+    var searchMovies = [Movie]() {
+        
+        didSet {
+            
+            collectionView.reloadData()
+        }
+    }
 
     
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        
-        movieServices.delegate = self
-        moviePoster = movieServices.getMoviePoster()
-        
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-       
+        print("hello")
+        navTitle.text = "Search Movies"
+        navTitle.textColor = UIColor.white
+        navTitle.font = UIFont(name: "HelveticaNeue-Thin", size: 40.0)
+        self.fetchMovies()
+        collectionView.prefetchDataSource = self
+        navigationItem.titleView = navTitle
+        self.configureSearchBar()
+        self.configureNavBar()
     }
     
     //MARK: Actions
     
-    func updateDataOfCell(_ cell:UICollectionViewCell,_ indexPath:IndexPath ){
-        let imageView:UIImageView=UIImageView(frame: CGRect(x: 0, y: 0, width: 115, height: 160))
-        imageView.image = UIImage(data: moviePoster[indexPath.row] as Data)
-        cell.backgroundColor = .green
-        cell.contentView.addSubview(imageView)
+    private func fetchMovies() {
+        
+       guard !isFetchInProgress else {
+         return
+       }
+        
+       isFetchInProgress = true
+        
+        movieService.fetchMovies(params: ["page":" \(currentPage)"], successHandler: { [unowned self] (response) in
+            self.isFetchInProgress = false
+            self.newMovies = response.results
+            self.movies.append(contentsOf: response.results)
+            self.totalResults = response.totalResults
+            self.currentPage += 1
+        }) 
+    }
+    
+    private func configureSearchBar(){
+        
+        //Configure SearchController
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.searchBar.placeholder = "Search Movies"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
         
     }
-
-    @IBAction func getMovieDetail(_ sender: UITapGestureRecognizer){
-        print("addcontroller")
+    private func configureNavBar(){
         
-        
+        //Configure TiltleView
+        navTitle.text = "Search Movies"
+        navTitle.textColor = UIColor.white
+        navTitle.font = UIFont(name: "HelveticaNeue-Thin", size: 40.0)
         
         
     }
     
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
-
+    //MARK: DataSource Method
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return moviePoster.count
-        
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-     
-        updateDataOfCell(cell,indexPath)
-        
     
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        if !isSearchBarEmpty{
+            
+            return searchMovies.count
+        }
+        return totalResults
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        
+        if !isSearchBarEmpty {
+            
+            let movie = searchMovies[indexPath.item]
+            cell.configure(movie)
+            return cell
+        }
+        if movies.count > indexPath.item{
+            
+            let movie = movies[indexPath.item]
+            cell.configure(movie)
+        }
+        
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if let vc = storyboard?.instantiateViewController(identifier: "MovieDetailViewController"){
-            self.navigationController?.pushViewController(vc, animated: true)
-            self.delegate?.cellInformation(indexPath: indexPath.row, moviePoster: moviePoster)
-            
-        }
-    }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }
 
-extension CollectionViewController: MovieServiceDelegate{
-    func ismovieDetailAvailable(movieDetail: [Movie]) {
+//MARK: Prefetching of data and loading data
+extension CollectionViewController: UICollectionViewDataSourcePrefetching{
+    
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]){
+        print("prefetch")
+        if indexPaths.contains(where: isLoadingCell){
+           
+            self.fetchMovies()
+           
+        }
+    }
+}
+
+extension CollectionViewController{
+    
+    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return indexPath.row >= movies.count
+    }
+    
+    func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
+        let indexPathsForVisibleRows = self.collectionView.indexPathsForVisibleItems
+      let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
+      return Array(indexPathsIntersection)
+    }
+    
+    private func calculateIndexPathsToReload(from newMovies: [Movie]) -> [IndexPath] {
+      let startIndex = movies.count - newMovies.count
+      let endIndex = startIndex + newMovies.count
+      return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+    }
+
+    
+}
+
+//MARK: Searching Data and update view
+extension CollectionViewController: UISearchResultsUpdating{
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        if !isSearchBarEmpty {
+            movieService.searchMovie(query: searchController.searchBar.text!, params: nil, successHandler: { [unowned self] (response) in
+                
+                self.searchMovies = response.results
+                
+            })
+        }
+        if !isSearching{
+            collectionView.reloadData()
+        }
         
     }
     
-    
-    func ismoviePosterDownloaded(moviePoster:[NSData]) {
-        self.collectionView!.reloadData()
-        self.moviePoster = moviePoster
-        
-    }
     
     
 }

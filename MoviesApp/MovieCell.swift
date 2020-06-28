@@ -7,13 +7,22 @@
 //
 
 import UIKit
-
+import Alamofire
+import Kingfisher
 class MovieCell: UICollectionViewCell {
+    
+    @IBOutlet weak var poster: UIImageView!
+    
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
-    
+    func configure(_ movie: Movie) {
+            
+            poster.kf.setImage(with: movie.posterURL)
+            
+            
+    }
 }
