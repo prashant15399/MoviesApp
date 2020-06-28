@@ -96,10 +96,12 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
         
         //Configure SearchController
         searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Movies"
         navigationItem.searchController = searchController
-        definesPresentationContext = true
+        
+       //navigationItem.hidesSearchBarWhenScrolling = false
+       //definesPresentationContext = true
         
     }
     private func configureNavBar(){
@@ -120,7 +122,7 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if !isSearchBarEmpty{
+        if !isSearchBarEmpty {
             
             return searchMovies.count
         }
@@ -187,7 +189,9 @@ extension CollectionViewController: UISearchResultsUpdating{
     
     func updateSearchResults(for searchController: UISearchController) {
         
-        if !isSearchBarEmpty {
+        let text = searchController.searchBar.text ?? ""
+        
+        if text.count > 3 {
             movieService.searchMovie(query: searchController.searchBar.text!, params: nil, successHandler: { [unowned self] (response) in
                 
                 self.searchMovies = response.results
@@ -198,6 +202,17 @@ extension CollectionViewController: UISearchResultsUpdating{
             collectionView.reloadData()
         }
         
+    }
+    
+    
+    
+}
+//MARK: Configuring Cell
+extension CollectionViewController: UICollectionViewDelegateFlowLayout{
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
+        
+        return CGSize(width: (collectionView.frame.size.width-20)/3, height: 200)
     }
     
     

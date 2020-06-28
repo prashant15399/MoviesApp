@@ -21,8 +21,8 @@ class MovieCell: UICollectionViewCell {
     
     func configure(_ movie: Movie) {
             
-            poster.kf.setImage(with: movie.posterURL)
-            
-            
+        poster.kf.setImage(with: movie.posterURL)
+        
+        
     }
 }

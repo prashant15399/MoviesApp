@@ -30,18 +30,20 @@
                                     <rect key="frame" x="0.0" y="0.0" width="115" height="160"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7an-Z3-ecu">
+                                        <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7an-Z3-ecu">
                                             <rect key="frame" x="0.0" y="0.0" width="115" height="160"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <gestureRecognizers/>
                                         </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="7an-Z3-ecu" secondAttribute="trailing" id="UIl-Hv-miM"/>
-                                        <constraint firstItem="7an-Z3-ecu" firstAttribute="top" secondItem="1BY-8f-obm" secondAttribute="top" id="VGt-vW-ZTD"/>
-                                        <constraint firstItem="7an-Z3-ecu" firstAttribute="leading" secondItem="1BY-8f-obm" secondAttribute="leading" id="YIw-96-e3g"/>
-                                        <constraint firstAttribute="bottom" secondItem="7an-Z3-ecu" secondAttribute="bottom" id="hcL-sx-sWB"/>
+                                        <constraint firstItem="7an-Z3-ecu" firstAttribute="top" secondItem="1BY-8f-obm" secondAttribute="top" id="NxU-qk-9ZE"/>
+                                        <constraint firstItem="7an-Z3-ecu" firstAttribute="leading" secondItem="1BY-8f-obm" secondAttribute="leading" id="h7k-AZ-7l7"/>
+                                        <constraint firstAttribute="trailing" secondItem="7an-Z3-ecu" secondAttribute="trailing" id="mJG-vc-IMn"/>
+                                        <constraint firstAttribute="bottom" secondItem="7an-Z3-ecu" secondAttribute="bottom" id="qjO-8j-RJd"/>
                                     </constraints>
                                 </collectionViewCellContentView>
+                                <color key="backgroundColor" red="1" green="0.47122535259999998" blue="0.56852817339999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="poster" destination="7an-Z3-ecu" id="1Fy-UB-sx8"/>
                                 </connections>
