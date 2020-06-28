@@ -7,11 +7,6 @@
 //
 
 import UIKit
-protocol CollectionViewControllerDelegate: class{
-    func cellInformation(indexPath:Int ,moviePoster:[NSData])
-}
-
-
 
 class CollectionViewController: UICollectionViewController, UITextFieldDelegate {
     
@@ -30,6 +25,7 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
         return searchController.isActive && !isSearchBarEmpty
     }
     
+    //Mark: Data Properties
     var movieService: MovieService = MovieStore.shared
     var totalResults = 0
     var currentPage = 1
@@ -92,9 +88,10 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
         }) 
     }
     
-    private func configureSearchBar(){
+    //Configure SearchController
+    
+    private func configureSearchBar() {
         
-        //Configure SearchController
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Movies"
@@ -104,21 +101,19 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
        //definesPresentationContext = true
         
     }
-    private func configureNavBar(){
+    
+    //Configure TiltleView
+    private func configureNavBar() {
         
-        //Configure TiltleView
         navTitle.text = "Search Movies"
         navTitle.textColor = UIColor.white
         navTitle.font = UIFont(name: "HelveticaNeue-Thin", size: 40.0)
-        
-        
     }
     
     //MARK: DataSource Method
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -133,13 +128,16 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
+        //Desplay Search Result
         if !isSearchBarEmpty {
             
             let movie = searchMovies[indexPath.item]
             cell.configure(movie)
             return cell
         }
-        if movies.count > indexPath.item{
+        
+        //Desplay Main Screen Data
+        if movies.count > indexPath.item {
             
             let movie = movies[indexPath.item]
             cell.configure(movie)
@@ -147,11 +145,18 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
         
         return cell
     }
-    
+    override func collectionView(_: UICollectionView, didSelectItemAt: IndexPath){
+        print("data")
+        
+    }
 }
 
+//MARK: CollectioView Delegate Method
+//extension CollectionViewController: UICollectionViewDe
+
+
 //MARK: Prefetching of data and loading data
-extension CollectionViewController: UICollectionViewDataSourcePrefetching{
+extension CollectionViewController: UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]){
         print("prefetch")
@@ -163,7 +168,7 @@ extension CollectionViewController: UICollectionViewDataSourcePrefetching{
     }
 }
 
-extension CollectionViewController{
+extension CollectionViewController {
     
     func isLoadingCell(for indexPath: IndexPath) -> Bool {
         return indexPath.row >= movies.count
@@ -189,9 +194,7 @@ extension CollectionViewController: UISearchResultsUpdating{
     
     func updateSearchResults(for searchController: UISearchController) {
         
-        let text = searchController.searchBar.text ?? ""
-        
-        if text.count > 3 {
+        if isSearching {
             movieService.searchMovie(query: searchController.searchBar.text!, params: nil, successHandler: { [unowned self] (response) in
                 
                 self.searchMovies = response.results
@@ -201,14 +204,10 @@ extension CollectionViewController: UISearchResultsUpdating{
         if !isSearching{
             collectionView.reloadData()
         }
-        
     }
-    
-    
-    
 }
 //MARK: Configuring Cell
-extension CollectionViewController: UICollectionViewDelegateFlowLayout{
+extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         

@@ -11,6 +11,8 @@ import Alamofire
 import Kingfisher
 class MovieCell: UICollectionViewCell {
     
+    //MARK: Properties
+    
     @IBOutlet weak var poster: UIImageView!
     
     

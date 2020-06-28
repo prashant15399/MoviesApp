@@ -90,6 +90,59 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		FBC34CF424A88E2D00CF98DC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FBF8A7B624A32CC1002B3ABD /* Movie.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FBC34CF524A88ECE00CF98DC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FBC34CF224A6252E00CF98DC /* MovieStore.swift */,
+				FBF8A7BA24A32DF3002B3ABD /* MovieService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FBC34CF624A88F5A00CF98DC /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FBC34CEE24A4C89300CF98DC /* MovieDetailViewController.swift */,
+				FBF8A7BC24A35C4F002B3ABD /* CollectionViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		FBC34CF724A88F8600CF98DC /* MovieCell */ = {
+			isa = PBXGroup;
+			children = (
+				FBF8A7C224A452F4002B3ABD /* MovieCell.swift */,
+			);
+			path = MovieCell;
+			sourceTree = "<group>";
+		};
+		FBC34CF824A88FD900CF98DC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FBF8A79224A1FE9D002B3ABD /* Main.storyboard */,
+				FBF8A79724A1FEA0002B3ABD /* LaunchScreen.storyboard */,
+				FBF8A79524A1FEA0002B3ABD /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		FBC34CF924A8901B00CF98DC /* DelegateFiles */ = {
+			isa = PBXGroup;
+			children = (
+				FBF8A78C24A1FE9D002B3ABD /* AppDelegate.swift */,
+				FBF8A78E24A1FE9D002B3ABD /* SceneDelegate.swift */,
+			);
+			path = DelegateFiles;
+			sourceTree = "<group>";
+		};
 		FBF8A78024A1FE9C002B3ABD = {
 			isa = PBXGroup;
 			children = (
@@ -113,17 +166,12 @@
 		FBF8A78B24A1FE9D002B3ABD /* MoviesApp */ = {
 			isa = PBXGroup;
 			children = (
-				FBF8A78C24A1FE9D002B3ABD /* AppDelegate.swift */,
-				FBF8A78E24A1FE9D002B3ABD /* SceneDelegate.swift */,
-				FBC34CEE24A4C89300CF98DC /* MovieDetailViewController.swift */,
-				FBF8A7BC24A35C4F002B3ABD /* CollectionViewController.swift */,
-				FBF8A7C224A452F4002B3ABD /* MovieCell.swift */,
-				FBF8A7B624A32CC1002B3ABD /* Movie.swift */,
-				FBC34CF224A6252E00CF98DC /* MovieStore.swift */,
-				FBF8A7BA24A32DF3002B3ABD /* MovieService.swift */,
-				FBF8A79224A1FE9D002B3ABD /* Main.storyboard */,
-				FBF8A79524A1FEA0002B3ABD /* Assets.xcassets */,
-				FBF8A79724A1FEA0002B3ABD /* LaunchScreen.storyboard */,
+				FBC34CF924A8901B00CF98DC /* DelegateFiles */,
+				FBC34CF624A88F5A00CF98DC /* Controllers */,
+				FBC34CF724A88F8600CF98DC /* MovieCell */,
+				FBC34CF524A88ECE00CF98DC /* Services */,
+				FBC34CF424A88E2D00CF98DC /* Model */,
+				FBC34CF824A88FD900CF98DC /* Resources */,
 				FBF8A79A24A1FEA0002B3ABD /* Info.plist */,
 			);
 			path = MoviesApp;

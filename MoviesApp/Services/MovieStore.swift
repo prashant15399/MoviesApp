@@ -16,9 +16,9 @@ public class MovieStore: MovieService{
     
 
     //MARK: feching data from server
-    func fetchMovies(params: [String: String]? = nil, successHandler successHandler: @escaping (_ response: MoviesResponse) -> Void) {
+    func fetchMovies(params: [String: String]? = nil, successHandler: @escaping (_ response: MoviesResponse) -> Void) {
         
-        var baseApiURL = baseAPIURL + "discover/movie?"
+        let baseApiURL = baseAPIURL + "discover/movie?"
         guard var urlComponents = URLComponents(string: baseApiURL) else {
             print("Invalid urlComponents")
             return
@@ -62,13 +62,13 @@ public class MovieStore: MovieService{
     //MARK:fetching searching data
     
     func searchMovie(query: String, params: [String : String]?, successHandler: @escaping (MoviesResponse) -> Void) {
+        
         print(baseAPIURL)
-        var baseApiURL = baseAPIURL + "search/movie?"
+        let baseApiURL = baseAPIURL + "search/movie?"
         guard var urlComponents = URLComponents(string: baseApiURL) else {
             print("Invalid urlComponents")
             return
         }
-        
         var queryItems = [URLQueryItem(name: "api_key", value: apiKey),
                           URLQueryItem(name: "query", value: query)]
         if let params = params {
