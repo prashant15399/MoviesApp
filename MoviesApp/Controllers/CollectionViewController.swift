@@ -1,10 +1,4 @@
-//
-//  CollectionViewController.swift
-//  MoviesApp
-//
-//  Created by Frontend on 6/24/20.
-//  Copyright © 2020 Frontend. All rights reserved.
-//
+
 
 import UIKit
 
@@ -13,8 +7,6 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
     //MARK:Properties
     
     //NavigationBar Properties
-    let navTitle = UILabel()
-    let textField = UILabel()
     let searchController = UISearchController(searchResultsController: nil)
     var isSearchBarEmpty:Bool {
         
@@ -34,15 +26,13 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
     var movies = [Movie]() {
         didSet {
             
-            if currentPage == 1{
+            if currentPage == 1 {
                 print(currentPage)
                 collectionView.reloadData()
-            }else if currentPage > 1 && !isSearching{
+            }else if currentPage > 1 && !isSearching {
                 print(currentPage)
                 collectionView.reloadItems(at: calculateIndexPathsToReload(from: newMovies))
             }
-            
-            
         }
     }
     var searchMovies = [Movie]() {
@@ -58,15 +48,10 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        print("hello")
-        navTitle.text = "Search Movies"
-        navTitle.textColor = UIColor.white
-        navTitle.font = UIFont(name: "HelveticaNeue-Thin", size: 40.0)
         self.fetchMovies()
         collectionView.prefetchDataSource = self
-        navigationItem.titleView = navTitle
         self.configureSearchBar()
-        self.configureNavBar()
+        
     }
     
     //MARK: Actions
@@ -98,17 +83,10 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
         navigationItem.searchController = searchController
         
        //navigationItem.hidesSearchBarWhenScrolling = false
-       //definesPresentationContext = true
+        searchController.definesPresentationContext = false
         
     }
     
-    //Configure TiltleView
-    private func configureNavBar() {
-        
-        navTitle.text = "Search Movies"
-        navTitle.textColor = UIColor.white
-        navTitle.font = UIFont(name: "HelveticaNeue-Thin", size: 40.0)
-    }
     
     //MARK: DataSource Method
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -146,6 +124,18 @@ class CollectionViewController: UICollectionViewController, UITextFieldDelegate 
         return cell
     }
     override func collectionView(_: UICollectionView, didSelectItemAt: IndexPath){
+        
+        if let vc = storyboard?.instantiateViewController(identifier:"MovieDetailViewController") as? MovieDetailViewController {
+            
+            if isSearching {
+                vc.movie = searchMovies[didSelectItemAt.item]
+            }
+            else {
+                vc.movie = movies[didSelectItemAt.item]
+            }
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+        }
         print("data")
         
     }
